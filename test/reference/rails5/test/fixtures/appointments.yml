@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  physician: one
+  patient: one
+  appointment_date: 2017-11-28 06:04:27
+
+two:
+  physician: two
+  patient: two
+  appointment_date: 2017-11-28 06:04:27
