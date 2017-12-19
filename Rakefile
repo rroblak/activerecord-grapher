@@ -22,8 +22,8 @@ Juwelier::Tasks.new do |gem|
   gem.name = "activerecord-grapher"
   gem.homepage = "http://github.com/rroblak/activerecord-grapher"
   gem.license = "MIT"
-  gem.summary = %Q{Build graphs from your ActiveRecord models}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Build graphs from your ActiveRecord model associations}
+  gem.description = %Q{Build graphs from your ActiveRecord model associations}
   gem.email = "rroblak@gmail.com"
   gem.authors = ["Ryan Oblak"]
   gem.version = s_version
