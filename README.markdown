@@ -6,7 +6,7 @@
 
 ### Build an [RGL](https://rubygems.org/gems/rgl) graph of all of your models
 
-Using `rails console` in `[test/reference/rails5](/test/reference/rails5)` as follows:
+Using `rails console` in [`test/reference/rails5`](/test/reference/rails5) as follows:
 ```ruby
 irb> model_graph = ActiveRecord::Grapher.build_graph()
 # Visualize the model graph
@@ -19,7 +19,7 @@ Produces the following graph:
 
 ![Rails 5 model graph](test/reference/rails5/graph.png)
 
-As you can see, all nodes in the returned graph are either subclasses of `[ActiveRecord::Base](http://api.rubyonrails.org/classes/ActiveRecord/Base.html)` or a `[Set](ruby-doc.org/stdlib/libdoc/set/rdoc/Set.html)`s of `[ActiveRecord::Base](http://api.rubyonrails.org/classes/ActiveRecord/Base.html)` subclasses.
+As you can see, all nodes in the returned graph are either subclasses of [`ActiveRecord::Base`](http://api.rubyonrails.org/classes/ActiveRecord/Base.html) or [`Set`](ruby-doc.org/stdlib/libdoc/set/rdoc/Set.html)s of [`ActiveRecord::Base`](http://api.rubyonrails.org/classes/ActiveRecord/Base.html) subclasses.
 
 ### Topologically sort all models
 
