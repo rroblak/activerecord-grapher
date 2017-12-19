@@ -3,6 +3,8 @@ source "https://rubygems.org"
 # Example:
 #   gem "activesupport", ">= 2.3.5"
 gem "semver2", "~> 3"
+gem "activerecord", ">= 1.0.0"
+gem "rgl", "~> 0.5"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
