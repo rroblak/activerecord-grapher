@@ -19,7 +19,7 @@ Produces the following graph:
 
 ![Rails 5 model graph](test/reference/rails5/graph.png)
 
-As you can see, all nodes in the returned graph are either subclasses of [`ActiveRecord::Base`](http://api.rubyonrails.org/classes/ActiveRecord/Base.html) or [`Set`](ruby-doc.org/stdlib/libdoc/set/rdoc/Set.html)s of [`ActiveRecord::Base`](http://api.rubyonrails.org/classes/ActiveRecord/Base.html) subclasses.
+All nodes in the returned graph are either subclasses of [`ActiveRecord::Base`](http://api.rubyonrails.org/classes/ActiveRecord/Base.html) or [`Set`](ruby-doc.org/stdlib/libdoc/set/rdoc/Set.html)s of [`ActiveRecord::Base`](http://api.rubyonrails.org/classes/ActiveRecord/Base.html) subclasses. A `Set` node represents two more classes that correspond to the same underlying database table. Currently this is only used to represent implicit models created via [`has_and_belongs_to_many`](http://guides.rubyonrails.org/association_basics.html#the-has-and-belongs-to-many-association) associations.
 
 ### Topologically sort all models
 
