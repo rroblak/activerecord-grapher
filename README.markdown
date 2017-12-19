@@ -4,32 +4,32 @@
 
 ## Examples
 
-### Topologically sort a given array of models
-```ruby
-# Author has_many :books, Book belongs_to :author
-# Supplier has_one :account, Account belongs_to :supplier
-# Physician has_many :appointments, has_many :patients, through: :appointments
-# Appointment belongs_to :physician, belongs_to :patient
-# Patient has_many :appointments, has_many :physicians, through: :appointments
-
-irb> models = [Account, Appointment, Author, Book, Patient, Physician, Supplier]
-irb> ActiveRecord::Grapher.tsort(models)
-=> [Author, Book, Supplier, Account, Physician, Patient, Appointment]
-```
-
-### Topologically sort all models
-```ruby
-irb> ActiveRecord::Grapher.tsort()
-=> [Author, Book, Supplier, Account, Physician, Patient, Appointment]
-```
-
 ### Build an [RGL](https://rubygems.org/gems/rgl) graph of all of your models
+
+Using `rails console` in `[test/reference/rails5](/test/reference/rails5)` as follows:
 ```ruby
 irb> model_graph = ActiveRecord::Grapher.build_graph()
 # Visualize the model graph
 irb> require 'rgl/dot'
 irb> model_graph.write_to_graphic_file('png')
 "graph.png"
+```
+
+Produces the following graph:
+
+![Rails 5 model graph](test/reference/rails5/graph.png)
+
+As you can see, all nodes in the returned graph are either subclasses of `[ActiveRecord::Base](http://api.rubyonrails.org/classes/ActiveRecord/Base.html)` or a `[Set](ruby-doc.org/stdlib/libdoc/set/rdoc/Set.html)`s of `[ActiveRecord::Base](http://api.rubyonrails.org/classes/ActiveRecord/Base.html)` subclasses.
+
+### Topologically sort all models
+
+To iterate over your models in topological order, use `topsort_iterator`:
+
+```ruby
+irb> require 'rgl/topsort'
+irb> model_graph = ActiveRecord::Grapher.build_graph()
+irb> model_graph.topsort_iterator.map {|v| v.respond_to?(:name) ? v.name : v.map {|w| w.name} }
+=> ["Book", "Author", ["HABTM_Parts", "HABTM_Assemblies"], "Part", "Assembly", "Appointment", "Patient", "Physician", "AccountHistory", "Account", "Supplier"]
 ```
 
 ## Contributing to activerecord-grapher
