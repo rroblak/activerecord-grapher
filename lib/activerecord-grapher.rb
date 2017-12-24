@@ -7,16 +7,11 @@ class ActiveRecord::Grapher
   def self.tsort(models = [])
   end
 
-  # Builds an `RGL::DirectedAdjacencyGraph` for the given set of
-  # `ActiveRecord::Base` models.
+  # Builds an `RGL::DirectedAdjacencyGraph` of `ActiveRecord::Base` models.
   #
-  # If `models` is not specified (or empty), all `ActiveRecord::Base` models
-  # will be added to the graph.
-  #
-  # @param models [Array of ActiveRecord:Base child instances] to add to the graphs
   # @return [RGL::DirectedAdjacencyGraph] the graph
   #
-  def self.build_graph(models=[])
+  def self.build_graph(options = {})
     Rails.application.eager_load! # Ensure all models are loaded.
 
     graph = RGL::DirectedAdjacencyGraph.new
@@ -33,6 +28,8 @@ class ActiveRecord::Grapher
                                   .each do |model|
       add_model_to_graph(model, graph)
     end
+
+    singularize_sets(graph) if options[:no_sets] == true
 
     graph
   end
@@ -152,5 +149,20 @@ class ActiveRecord::Grapher
   # Please improve this if you're able to find a better way of doing it.
   def self.private_habtm_model_for(source_model, dest_model)
     source_model.const_get("#{HABTM_PREFIX}#{dest_model.to_s.pluralize}")
+  end
+
+  def self.singularize_sets(graph)
+    vertices_to_remove = []
+    graph.edges.each do |edge|
+      new_source = edge.source.is_a?(Set) ? edge.source.first : edge.source
+      new_target = edge.target.is_a?(Set) ? edge.target.first : edge.target
+
+      graph.add_edge(new_source, new_target)
+      graph.remove_edge(edge.source, edge.target)
+    end
+
+    graph.vertices.each do |vertex|
+      graph.remove_vertex(vertex) if vertex.is_a?(Set)
+    end
   end
 end

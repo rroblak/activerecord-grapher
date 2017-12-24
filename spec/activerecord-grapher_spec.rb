@@ -183,7 +183,7 @@ RSpec.describe ActiveRecord::Grapher, ".build_graph" do
   end
 
   context "with a :has_and_belongs_to_many association" do
-    before do
+    before(:context) do
       class Assembly < ActiveRecord::Base
 				has_and_belongs_to_many :parts
 			end
@@ -193,16 +193,34 @@ RSpec.describe ActiveRecord::Grapher, ".build_graph" do
 			end
     end
 
-    after do
+    after(:context) do
       remove_constants(:Assembly, :Part)
     end
 
-    it "adds the join models to the graph and connects them" do
+    it "adds the join models as a Set to the graph and connects them" do
       graph = ActiveRecord::Grapher.build_graph()
 
       join_models = Set.new([Assembly.const_get(:HABTM_Parts), Part.const_get(:HABTM_Assemblies)])
-      expect(graph.has_edge?(join_models, Assembly)).to eq true
-      expect(graph.has_edge?(join_models, Part)).to eq true
+      expect(graph.vertices).to contain_exactly(Assembly, Part, join_models)
+
+      expect(graph.edges).to contain_exactly(RGL::Edge::DirectedEdge[join_models, Assembly],
+                                             RGL::Edge::DirectedEdge[join_models, Part])
+    end
+
+    context "with no_sets: true config option" do
+      it "adds only one of the join models to the graph" do
+        graph = ActiveRecord::Grapher.build_graph(no_sets: true)
+
+        join_models = graph.find_all do |v|
+          v == Assembly.const_get(:HABTM_Parts) || v == Part.const_get(:HABTM_Assemblies)
+        end
+
+        expect(join_models.length).to eq 1
+        expect(graph.vertices).to contain_exactly(Assembly, Part, join_models.first)
+
+        expect(graph.edges).to contain_exactly(RGL::Edge::DirectedEdge[join_models.first, Assembly],
+                                               RGL::Edge::DirectedEdge[join_models.first, Part])
+      end
     end
   end
 end
